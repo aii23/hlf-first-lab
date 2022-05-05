@@ -9,6 +9,7 @@ import (
     "encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
+    "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 // SmartContract provides functions for managing an Asset
@@ -27,6 +28,11 @@ type Person struct {
     Status          string `json:"Status"`
     Surname         string `json:"Surname"`
     TelephoneNumber string `json:"TelephoneNumber"`
+}
+
+type HistData struct {
+    Data       Person `json:"Data"`
+    Time  string   `json:"Time"`
 }
 
 func (s *SmartContract) AddPerson(ctx contractapi.TransactionContextInterface, address string, city string, id string, name string, status string, surname string, telephoneNumber string) error {
@@ -118,6 +124,32 @@ func (s *SmartContract) PersonExists(ctx contractapi.TransactionContextInterface
 	}
 
 	return personJSON != nil, nil
+}
+
+func (s *SmartContract) GetPersonHistory(ctx contractapi.TransactionContextInterface, id string) ([]HistData, error) {
+    hist, err := ctx.GetStub().GetHistoryForKey(id)
+    if err != nil {
+		return nil, fmt.Errorf("failed to read history world state: %v", err)
+	}
+    
+    result := make([]HistData, 0)    
+
+    for hist.HasNext() {
+        var histData HistData
+        cur, err := hist.Next()
+        if err != nil {
+            return nil, fmt.Errorf("failed to read next history item: %v", err)
+        }
+
+        err = json.Unmarshal(cur.GetValue(), &histData.Data)
+        if err != nil {
+            return nil, fmt.Errorf("Can't unmarshal person: %v", err)
+        }
+        histData.Time = cur.GetTimestamp().AsTime().Format(time.UnixDate)
+        result = append(result, histData)
+    }
+
+    return result, nil
 }
 
 func main() {
