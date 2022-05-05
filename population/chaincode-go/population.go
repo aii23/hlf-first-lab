@@ -9,7 +9,6 @@ import (
     "encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
-    "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 // SmartContract provides functions for managing an Asset
@@ -145,7 +144,7 @@ func (s *SmartContract) GetPersonHistory(ctx contractapi.TransactionContextInter
         if err != nil {
             return nil, fmt.Errorf("Can't unmarshal person: %v", err)
         }
-        histData.Time = cur.GetTimestamp().AsTime().Format(time.UnixDate)
+        histData.Time = cur.GetTimestamp().String()
         result = append(result, histData)
     }
 
