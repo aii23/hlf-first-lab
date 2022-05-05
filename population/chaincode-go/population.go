@@ -30,8 +30,8 @@ type Person struct {
 }
 
 type HistData struct {
-    Data       Person `json:"Data"`
-    Time  string   `json:"Time"`
+    Data  Person `json:"Data"`
+    Time  string `json:"Time"`
 }
 
 func (s *SmartContract) AddPerson(ctx contractapi.TransactionContextInterface, address string, city string, id string, name string, status string, surname string, telephoneNumber string) error {
