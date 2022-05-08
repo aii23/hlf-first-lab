@@ -300,7 +300,7 @@ Channel: &ChannelDefaults
 ################################################################################
 Profiles:
 
-    TwoOrgsApplicationGenesis:
+    SingleOrganization:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
@@ -311,5 +311,4 @@ Profiles:
             <<: *ApplicationDefaults
             Organizations:
                 - *Org1
-                - *Org2
             Capabilities: *ApplicationCapabilities

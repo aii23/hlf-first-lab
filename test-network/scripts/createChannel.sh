@@ -27,7 +27,7 @@ createChannelGenesisBlock() {
 		fatalln "configtxgen tool not found."
 	fi
 	set -x
-	configtxgen -profile TwoOrgsApplicationGenesis -outputBlock ./channel-artifacts/${CHANNEL_NAME}.block -channelID $CHANNEL_NAME
+	configtxgen -profile SingleOrganization -outputBlock ./channel-artifacts/${CHANNEL_NAME}.block -channelID $CHANNEL_NAME
 	res=$?
 	{ set +x; } 2>/dev/null
   verifyResult $res "Failed to generate channel configuration transaction..."
@@ -92,15 +92,15 @@ createChannel
 successln "Channel '$CHANNEL_NAME' created"
 
 ## Join all the peers to the channel
-infoln "Joining org1 peer to the channel..."
+infoln "Joining org1 peer0 to the channel..."
 joinChannel 1
-infoln "Joining org2 peer to the channel..."
+infoln "Joining org1 peer1 to the channel..."
 joinChannel 2
 
 ## Set the anchor peers for each org in the channel
 infoln "Setting anchor peer for org1..."
 setAnchorPeer 1
-infoln "Setting anchor peer for org2..."
+#infoln "Setting anchor peer for second peer..."
 setAnchorPeer 2
 
 successln "Channel '$CHANNEL_NAME' joined"

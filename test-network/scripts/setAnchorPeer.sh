@@ -17,13 +17,13 @@ createAnchorPeerUpdate() {
 
   infoln "Generating anchor peer update transaction for Org${ORG} on channel $CHANNEL_NAME"
 
-  if [ $ORG -eq 1 ]; then
+  if [ $PEER -eq 1 ]; then
     HOST="peer0.org1.example.com"
     PORT=7051
-  elif [ $ORG -eq 2 ]; then
-    HOST="peer0.org2.example.com"
+  elif [ $PEER -eq 2 ]; then
+    HOST="peer1.org1.example.com"
     PORT=9051
-  elif [ $ORG -eq 3 ]; then
+  elif [ $PEER -eq 3 ]; then
     HOST="peer0.org3.example.com"
     PORT=11051
   else
@@ -49,7 +49,9 @@ updateAnchorPeer() {
   successln "Anchor peer set for org '$CORE_PEER_LOCALMSPID' on channel '$CHANNEL_NAME'"
 }
 
-ORG=$1
+# Always org 1
+ORG=1
+PEER=$1
 CHANNEL_NAME=$2
 
 setGlobalsCLI $ORG
