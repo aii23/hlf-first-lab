@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -rf ../population/application-go/keystore
+rm -rf ../population/application-go/wallet
+
 /bin/bash ./network.sh down 
 
 /bin/bash ./network.sh up
