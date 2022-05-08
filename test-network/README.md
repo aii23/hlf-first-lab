@@ -1,50 +1,49 @@
-# Running the test network
-
-You can use the `./network.sh` script to stand up a simple Fabric test network. The test network has two peer organizations with one peer each and a single node raft ordering service. You can also use the `./network.sh` script to create channels and deploy chaincode. For more information, see [Using the Fabric test network](https://hyperledger-fabric.readthedocs.io/en/latest/test_network.html). The test network is being introduced in Fabric v2.0 as the long term replacement for the `first-network` sample.
-
-Before you can deploy the test network, you need to follow the instructions to [Install the Samples, Binaries and Docker Images](https://hyperledger-fabric.readthedocs.io/en/latest/install.html) in the Hyperledger Fabric documentation.
-
-## Using the Peer commands
-
-The `setOrgEnv.sh` script can be used to set up the environment variables for the organizations, this will help to be able to use the `peer` commands directly.
-
-First, ensure that the peer binaries are on your path, and the Fabric Config path is set assuming that you're in the `test-network` directory.
-
-```bash
- export PATH=$PATH:$(realpath ../bin)
- export FABRIC_CFG_PATH=$(realpath ../config)
+# Лабораторная 1 по предмету Hyperledger Fabric
+## Запуск сети, установление чейнкода
+Для запуска сети и установки чейнкода нужно запустить скрипт [run.sh](test-network/run.sh) из папки test-network. Он запустит сеть с 1 организацией с 2 пирами и с одним ордерером. Так же эта команда создат канал population в котором установит чейнкод population. 
 ```
-
-You can then set up the environment variables for each organization. The `./setOrgEnv.sh` command is designed to be run as follows.
-
-```bash
-export $(./setOrgEnv.sh Org2 | xargs)
+./run.sh
 ```
+## Расположение чейнкода 
+Чейнкод располагается [тут](population/chaincode-go)
+## Расположение приложения
+Приложение располагается [тут](population/application-go)
+## Запуск приложения
+Для запуска приложения нужно запустить команду
+```
+go run population.go
+```
+После чего будет запущено консольное приложение. Для помощи введите команду help. Ввод параметров онеобходимо вводить 1 на 1 строку.
 
-(Note bash v4 is required for the scripts.)
-
-You will now be able to run the `peer` commands in the context of Org2. If a different command prompt, you can run the same command with Org1 instead.
-The `setOrgEnv` script outputs a series of `<name>=<value>` strings. These can then be fed into the export command for your current shell.
-
-## Chaincode-as-a-service
-
-To learn more about how to use the improvements to the Chaincode-as-a-service please see this [tutorial](./test-network/../CHAINCODE_AS_A_SERVICE_TUTORIAL.md). It is expected that this will move to augment the tutorial in the [Hyperledger Fabric ReadTheDocs](https://hyperledger-fabric.readthedocs.io/en/release-2.4/cc_service.html)
-
-
-## Podman
-
-*Note - podman support should be considered experimental. There are issues with volume mounting on MacOS that prevent this working. If wish to use podman a LinuxVM is suggested.*
-
-A copy of the `install_fabric.sh` script is in the `test-network` directory. This has been enhanced to support a `podman` argument; if used it will use the `podman` command to pull down images and tag them rather than docker. The images are the same, just pulled differently
-
-The `network.sh` script has been enhanced so that it can use `podman` and `podman-compose` instead of docker. Ensure that `CONTAINER_CLI` is set as below when running `network.sh` script. 
-
-```bash
-CONTAINER_CLI=podman ./network.sh up
-````
-
-As there is no Docker-Daemon when using podman, only the `./network.sh deployCCAAS` command will work.
-
-
-
-
+### Пример работы 
+```
+============ application-golang starts ============
+Initialization
+============ Populating wallet ============
+ [fabsdk/core] 2022/05/08 07:59:09 UTC - cryptosuite.GetDefault -> INFO No default cryptosuite found, using default SW implementation
+Initialization finished
+Write commands separately
+Print help for help inforamtion
+insert
+Address:
+Moscow,1
+City:
+Moscow 
+Id:
+1
+Name:
+Ivan
+Status:
+Unknown 
+Surname:
+Ivanov
+TelephoneNumber:
+88005353535
+Enter command
+read 
+Id:
+1
+{"Address":"Moscow,1","City":"Moscow","Id":"1","Name":"Ivan","Status":"Unknown","Surname":"Ivanov","TelephoneNumber":"88005353535"}
+Enter command
+exit
+```
